@@ -1,0 +1,26 @@
+CREATE TABLE product_images (
+    product_id INT NOT NULL,
+    image_data BLOB NOT NULL,
+    PRIMARY KEY (product_id)
+);
+
+
+CREATE TABLE product (
+    product_id INT NOT NULL,
+    product_name VARCHAR(255) NOT NULL,
+    owner_id INT NOT NULL,
+    parent INT[] NOT NULL,
+    price INT NOT NULL,
+    quantity INT NOT NULL,
+    description VARCHAR(255)
+    PRIMARY KEY (product_id, owner_id),
+    FOREIGN KEY(owner_id)
+);
+
+CREATE TABLE owner(
+    owner_id INT NOT NULL,
+    owner VARCHAR(255) NOT NULL,
+    account_balance INT NOT NULL,
+    PRIMARY KEY (owner_id)
+);
+

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from web3 import Web3, HTTPProvider
 import json
+import MySQLdb
 
 wei = 10**18
 
@@ -20,7 +21,7 @@ with open(compiled_contract_path) as file:
 contract_instance = w3.eth.contract(
     address = contract_address, abi = contract_abi) # create an instance of your contract using web3
 
-###
+###Blockchain apis
 
 def getParentLineage (productId):
     x = [productId]
@@ -81,6 +82,30 @@ def get_parent_lineage(productId):
     parent_lineage = getParentLineage(productId)
 
     return jsonify({'parentLineage': parent_lineage})
+
+
+### Sql apis
+
+# MySQL database connection settings
+db_host = 'localhost'
+db_user = 'root'
+db_password = '123123'
+db_name = 'fypbackend'
+
+# Create a connection
+db = MySQLdb.connect(host=db_host, user=db_user, passwd=db_password, db=db_name)
+
+app = Flask(__name__)
+
+# define your get_product_list API route
+@app.route('/product_list/<string:product_name>', methods=['GET'])
+def get_product_list(product_name):
+    cursor = db.cursor()
+    query = ("SELECT * FROM product WHERE product_name LIKE %s")
+    cursor.execute(query, (f"%{product_name}%",))
+    result = cursor.fetchall()
+    cursor.close()
+    return jsonify(result)
 
 
 if __name__ == '__main__':

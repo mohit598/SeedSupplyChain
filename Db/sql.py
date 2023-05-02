@@ -20,7 +20,7 @@ def create_product_images_table():
 
 # CREATE query to create the 'product' table
 def create_product_table():
-    query = "CREATE TABLE product (product_id INT NOT NULL, product_name VARCHAR(255) NOT NULL, owner_id INT NOT NULL, parent INT[] NOT NULL, price INT NOT NULL, quantity INT NOT NULL, description VARCHAR(255), PRIMARY KEY (product_id), FOREIGN KEY (owner_id) REFERENCES owner(owner_id))"
+    query = 'CREATE TABLE product (product_id INT NOT NULL,product_name VARCHAR(255) NOT NULL,owner_id INT NOT NULL,parent VARCHAR(255) NOT NULL,price INT NOT NULL,quantity INT NOT NULL,description VARCHAR(255),PRIMARY KEY (product_id),FOREIGN KEY (owner_id) REFERENCES owner(owner_id));'
     cursor.execute(query)
     db.commit()
 
@@ -28,6 +28,13 @@ def create_product_table():
 def create_owner_table():
     query = "CREATE TABLE owner (owner_id INT NOT NULL, owner VARCHAR(255) NOT NULL, account_balance INT NOT NULL, PRIMARY KEY (owner_id))"
     cursor.execute(query)
+    db.commit()
+
+# CREATE query to insert an owner
+def insert_owner(owner_id, owner, account_balance):
+    query = "INSERT INTO owner (owner_id, owner, account_balance) VALUES (%s, %s, %s)"
+    values = (owner_id, owner, account_balance)
+    cursor.execute(query, values)
     db.commit()
 
 # INSERT query to insert data into the 'product_images' table
@@ -96,7 +103,6 @@ def get_product_list(product_name):
     cursor.close()
     return result
 
-
-create_product_table()
+insert_product(2,"apple",1,1,"0",10,"none")
 
 db.close()
